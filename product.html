@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>পণ্যের বিস্তারিত - JavrVX Organic</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="assets/js/tw-config.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Anek+Bangla:wght@500;600;700;800&family=Hind+Siliguri:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body data-page="product" class="min-h-screen flex flex-col">
+    <div id="site-header"></div>
+
+    <main class="flex-1 bg-cream">
+        <section class="relative pt-28 sm:pt-32 pb-16 overflow-hidden">
+            <div class="blob w-[34rem] h-[34rem] bg-lime-500/25 -top-40 -left-40 animate-blob"></div>
+            <div class="blob w-[30rem] h-[30rem] bg-gold-400/30 top-20 -right-40 animate-blob" style="animation-delay:-6s"></div>
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+                <nav id="crumbs" data-reveal="down" class="text-xs text-leaf-900/50 mb-8 flex flex-wrap items-center gap-2"></nav>
+                <div id="productDetail"></div>
+            </div>
+        </section>
+
+        <section id="relatedSection" class="py-16 bg-white rounded-t-5xl">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <p data-reveal="up" class="eyebrow bg-leaf-900/5 text-leaf-700">আরও দেখুন</p>
+                <h2 class="split font-bold text-3xl sm:text-4xl text-leaf-950 mt-4 mb-8">একই ক্যাটাগরির অন্যান্য পণ্য</h2>
+                <div id="relatedGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5"></div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Sticky buy bar -->
+    <div id="buyBar" class="fixed bottom-0 inset-x-0 z-40 p-3 translate-y-full transition-transform duration-500">
+        <div class="max-w-3xl mx-auto bg-leaf-950/95 backdrop-blur-xl text-white rounded-full pl-2 pr-2 py-2 flex items-center gap-3 shadow-2xl border border-white/10">
+            <img id="barImg" alt="" class="w-11 h-11 rounded-full object-cover">
+            <div class="flex-1 min-w-0">
+                <p id="barName" class="text-sm font-bold truncate"></p>
+                <p id="barPrice" class="text-xs text-lime-500 font-bold"></p>
+            </div>
+            <button onclick="addMain(document.getElementById('barImg'))" class="btn btn-lime px-5 py-3 text-sm"><i class="fa-solid fa-bag-shopping"></i><span class="hidden sm:inline">কার্টে যোগ</span></button>
+        </div>
+    </div>
+
+    <div id="site-footer"></div>
+
+    <script src="assets/js/data.js"></script>
+    <script src="assets/js/app.js"></script>
+    <script>
+        const product = findProduct(qs('id'));
+        let qty = 1;
+        let activeTab = 0;
+
+        function variantLabel(v) {
+            const m = v.en.match(/\(([^)]+)\)$/);
+            return v.weight + (m ? ' · ' + m[1] : '');
+        }
+
+        function renderDetail() {
+            const p = product;
+            const liked = Wishlist.has(p.id);
+            const variants = productsData.filter(v => v.group === p.group);
+
+            productDetail.innerHTML = `
+            <div class="grid lg:grid-cols-2 gap-10 lg:gap-16 items-start">
+                <div data-reveal="zoom" class="relative lg:sticky lg:top-28" data-depth-root>
+                    <div class="absolute inset-6 rounded-full bg-gradient-to-br from-gold-300 to-lime-400 blur-2xl opacity-60 animate-blob"></div>
+                    <div data-depth="0.25" class="relative rounded-5xl overflow-hidden aspect-square bg-white shadow-2xl shadow-leaf-900/20 transition-[translate] duration-300 ease-out">
+                        <img id="mainImg" src="${p.image.replace('w=600', 'w=1000')}" alt="${esc(p.en)}" class="w-full h-full object-cover hover:scale-110 transition-transform duration-1000">
+                    </div>
+                    <span data-depth="0.7" class="absolute -top-3 -left-3 sm:top-6 sm:-left-6 bg-lime-500 text-leaf-950 font-bold text-sm px-5 py-2.5 rounded-full shadow-xl animate-float transition-[translate] duration-300 ease-out">${p.tag}</span>
+                    <div data-depth="0.9" class="absolute -bottom-5 right-4 sm:-right-6 glass-light rounded-3xl px-5 py-3 shadow-xl flex items-center gap-3 animate-float-slow transition-[translate] duration-300 ease-out">
+                        <span class="relative w-10 h-10 rounded-full bg-leaf-900 text-lime-500 flex items-center justify-center ring-pulse"><i class="fa-solid fa-shield-halved"></i></span>
+                        <div><p class="text-[10px] text-leaf-900/60 font-bold uppercase">ল্যাব টেস্টেড</p><p class="text-sm font-bold text-leaf-950">১০০% খাঁটি</p></div>
+                    </div>
+                </div>
+
+                <div class="space-y-6">
+                    <div>
+                        <a data-reveal="up" href="products.html?cat=${p.category}" class="eyebrow bg-leaf-900/5 text-leaf-700 hover:bg-lime-500 hover:text-leaf-950 transition-colors">${categoryLabel(p.category)}</a>
+                        <h1 class="split font-bold text-4xl sm:text-5xl text-leaf-950 mt-4 leading-tight">${p.name}</h1>
+                        <p data-reveal="up" style="--d:.2s" class="text-leaf-900/40 font-brand mt-2">${p.en}</p>
+                    </div>
+
+                    <div data-reveal="up" style="--d:.25s" class="flex items-end gap-3">
+                        <span id="priceTag" class="font-display font-extrabold text-5xl text-leaf-950">${taka(p.price)}</span>
+                        <span class="text-leaf-900/50 mb-2">/ ${p.weight}</span>
+                    </div>
+
+                    ${variants.length > 1 ? `
+                    <div data-reveal="up" style="--d:.3s">
+                        <p class="text-xs font-bold text-leaf-900/60 uppercase tracking-wider mb-3">সাইজ / ভ্যারিয়েন্ট বেছে নিন</p>
+                        <div class="flex flex-wrap gap-2">
+                            ${variants.map(v => `<a href="product.html?id=${v.id}" class="group px-4 py-3 rounded-2xl text-sm font-semibold border-2 transition-all duration-300 ${v.id === p.id
+                                ? 'bg-leaf-900 text-lime-500 border-leaf-900 shadow-lg'
+                                : 'bg-white text-leaf-900 border-leaf-900/10 hover:border-leaf-600 hover:-translate-y-0.5'}">${variantLabel(v)}<span class="block text-xs ${v.id === p.id ? 'text-white/70' : 'text-leaf-900/50'}">${taka(v.price)}</span></a>`).join('')}
+                        </div>
+                    </div>` : ''}
+
+                    <div data-reveal="up" style="--d:.35s" class="flex flex-wrap items-center gap-3 pt-2">
+                        <div class="flex items-center bg-white rounded-full border-2 border-leaf-900/10 p-1">
+                            <button onclick="stepQty(-1)" aria-label="কমান" class="w-11 h-11 rounded-full hover:bg-cream text-lg transition-colors">−</button>
+                            <span id="qty" class="w-10 text-center font-display font-bold text-lg">${bn(qty)}</span>
+                            <button onclick="stepQty(1)" aria-label="বাড়ান" class="w-11 h-11 rounded-full hover:bg-cream text-lg transition-colors">+</button>
+                        </div>
+                        <button onclick="addMain(document.getElementById('mainImg'))" data-magnetic class="btn btn-lime flex-1 min-w-[180px] px-6 py-4"><i class="fa-solid fa-bag-shopping"></i> কার্টে যোগ করুন</button>
+                        <button onclick="buyNow()" class="btn btn-dark flex-1 min-w-[150px] px-6 py-4">এখনই কিনুন <i class="fa-solid fa-arrow-right btn-icon"></i></button>
+                        <button onclick="Wishlist.toggle(product.id)" data-wish="${p.id}" aria-label="পছন্দের তালিকা" class="w-14 h-14 rounded-full border-2 border-leaf-900/10 bg-white flex items-center justify-center text-xl hover:scale-110 transition-transform ${liked ? 'text-red-500' : 'text-leaf-900'}">
+                            <i class="fa-${liked ? 'solid' : 'regular'} fa-heart"></i>
+                        </button>
+                    </div>
+
+                    <div data-reveal="up" style="--d:.4s" class="bg-white rounded-4xl border border-leaf-900/5 overflow-hidden">
+                        <div id="tabBar" class="relative flex border-b border-leaf-900/5">
+                            ${['বিস্তারিত', 'উপকারিতা', 'ডেলিভারি'].map((t, i) => `<button onclick="setTab(${i})" class="tab-btn flex-1 py-4 text-sm font-bold transition-colors ${i === activeTab ? 'text-leaf-950' : 'text-leaf-900/40 hover:text-leaf-900'}">${t}</button>`).join('')}
+                            <span id="tabInk" class="absolute bottom-0 h-[3px] bg-lime-500 rounded-full transition-all duration-500" style="width:33.33%;left:${activeTab * 33.33}%"></span>
+                        </div>
+                        <div id="tabBody" class="p-6 text-sm leading-relaxed text-leaf-900/80 min-h-[150px] transition-opacity duration-300"></div>
+                    </div>
+
+                    <div data-reveal="up" style="--d:.45s" class="grid grid-cols-3 gap-3">
+                        ${[['fa-vial-circle-check', 'ল্যাব টেস্টেড'], ['fa-truck-fast', 'ক্যাশ অন ডেলিভারি'], ['fa-rotate-left', 'সহজ রিটার্ন']].map(([i, t]) => `
+                        <div class="group p-4 rounded-3xl bg-white border border-leaf-900/5 text-center hover:bg-leaf-900 transition-colors duration-500">
+                            <i class="fa-solid ${i} text-xl text-leaf-600 group-hover:text-lime-500 group-hover:scale-125 transition-all duration-500"></i>
+                            <p class="text-[11px] sm:text-xs font-bold text-leaf-900 group-hover:text-white mt-2 transition-colors">${t}</p>
+                        </div>`).join('')}
+                    </div>
+                </div>
+            </div>`;
+            renderTab();
+        }
+
+        function renderTab() {
+            const p = product;
+            const bodies = [
+                `<p>${p.details || p.description}</p>`,
+                `<ul class="space-y-3">${(p.benefits || []).map((b, i) => `<li class="flex items-center gap-3" style="animation: logo-pop .5s ${i * 0.08}s both"><span class="w-7 h-7 rounded-full bg-lime-500 text-leaf-950 flex items-center justify-center text-xs"><i class="fa-solid fa-check"></i></span>${b}</li>`).join('')}</ul>`,
+                `<ul class="space-y-3">
+                    <li class="flex gap-3"><i class="fa-solid fa-truck text-leaf-600 mt-1"></i>ঢাকার ভিতরে ২৪ ঘণ্টায় ডেলিভারি — চার্জ ৳৬০</li>
+                    <li class="flex gap-3"><i class="fa-solid fa-map-location-dot text-leaf-600 mt-1"></i>ঢাকার বাইরে ২-৩ দিনে — চার্জ ৳১২০</li>
+                    <li class="flex gap-3"><i class="fa-solid fa-hand-holding-dollar text-leaf-600 mt-1"></i>পণ্য হাতে পেয়ে মূল্য পরিশোধ করুন</li>
+                </ul>`,
+            ];
+            tabBody.style.opacity = '0';
+            setTimeout(() => { tabBody.innerHTML = bodies[activeTab]; tabBody.style.opacity = '1'; }, 150);
+        }
+
+        function setTab(i) {
+            activeTab = i;
+            document.querySelectorAll('.tab-btn').forEach((b, j) => {
+                b.classList.toggle('text-leaf-950', j === i);
+                b.classList.toggle('text-leaf-900/40', j !== i);
+            });
+            tabInk.style.left = (i * 33.33) + '%';
+            renderTab();
+        }
+
+        function stepQty(d) {
+            qty = Math.max(1, qty + d);
+            const el = document.getElementById('qty');
+            el.textContent = bn(qty);
+            el.animate?.([{ transform: `translateY(${d > 0 ? -8 : 8}px)`, opacity: 0 }, { transform: 'none', opacity: 1 }], { duration: 250 });
+        }
+
+        function addMain(fromImg) { flyToCart(fromImg, () => Cart.add(product.id, qty)); }
+        function buyNow() { Cart.add(product.id, qty, true); navigate('checkout.html'); }
+
+        if (!product) {
+            productDetail.innerHTML = `
+                <div class="text-center py-24 bg-white rounded-5xl">
+                    <div class="w-24 h-24 mx-auto rounded-full bg-cream flex items-center justify-center text-4xl text-leaf-900/30 animate-float"><i class="fa-solid fa-box-open"></i></div>
+                    <p class="font-display font-bold text-2xl text-leaf-950 mt-6">দুঃখিত, পণ্যটি পাওয়া যায়নি</p>
+                    <a href="products.html" class="btn btn-dark px-6 py-3 mt-6">সব পণ্য দেখুন <i class="fa-solid fa-arrow-right btn-icon"></i></a>
+                </div>`;
+            relatedSection.remove();
+            buyBar.remove();
+        } else {
+            document.title = `${product.name} (${product.weight}) - JavrVX Organic`;
+            crumbs.innerHTML = `
+                <a href="index.html" class="hover:text-leaf-700">হোম</a><i class="fa-solid fa-chevron-right text-[8px]"></i>
+                <a href="products.html" class="hover:text-leaf-700">পণ্যসমূহ</a><i class="fa-solid fa-chevron-right text-[8px]"></i>
+                <a href="products.html?cat=${product.category}" class="hover:text-leaf-700">${categoryLabel(product.category)}</a><i class="fa-solid fa-chevron-right text-[8px]"></i>
+                <span class="text-leaf-950 font-semibold">${product.name}</span>`;
+            renderDetail();
+
+            const related = productsData.filter(p => p.category === product.category && p.group !== product.group);
+            const fill = related.length >= 4 ? related : related.concat(productsData.filter(p => p.category !== product.category));
+            relatedGrid.innerHTML = fill.slice(0, 4).map(productCard).join('');
+
+            barImg.src = product.image;
+            barName.textContent = `${product.name} · ${product.weight}`;
+            barPrice.textContent = taka(product.price);
+            const mainBtnObserver = new IntersectionObserver(([en]) => {
+                buyBar.classList.toggle('translate-y-full', en.isIntersecting || en.boundingClientRect.top > 0);
+            });
+            mainBtnObserver.observe(document.getElementById('priceTag'));
+        }
+    </script>
+</body>
+</html>

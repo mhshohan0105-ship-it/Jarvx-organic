@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>পছন্দের তালিকা - JavrVX Organic</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="assets/js/tw-config.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Anek+Bangla:wght@500;600;700;800&family=Hind+Siliguri:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body data-page="wishlist" class="min-h-screen flex flex-col">
+    <div id="site-header"></div>
+
+    <section id="pageBanner" data-icon="fa-heart" data-title="আপনার পছন্দের তালিকা" data-crumb="পছন্দের তালিকা" data-sub="যেসব পণ্যে ❤️ দিয়েছেন সেগুলো এখানে সংরক্ষিত আছে।"></section>
+
+    <main class="flex-1 bg-cream pb-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div id="wishActions" class="hidden flex-col sm:flex-row sm:items-center justify-between gap-3 mb-8">
+                <p class="text-leaf-900/70"><b id="wishCount" class="text-leaf-950"></b> টি পণ্য সংরক্ষিত</p>
+                <button onclick="addAllToCart()" class="btn btn-dark px-6 py-3 text-sm"><i class="fa-solid fa-bag-shopping"></i> সবগুলো কার্টে যোগ করুন</button>
+            </div>
+            <div id="wishGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5"></div>
+        </div>
+    </main>
+
+    <div id="site-footer"></div>
+
+    <script src="assets/js/data.js"></script>
+    <script src="assets/js/app.js"></script>
+    <script>
+        function renderWishlist() {
+            const list = Wishlist.items().map(findProduct);
+            wishActions.classList.toggle('hidden', !list.length);
+            wishActions.classList.toggle('flex', !!list.length);
+            wishCount.textContent = bn(list.length);
+            wishGrid.innerHTML = list.length ? list.map(productCard).join('') : `
+                <div class="col-span-full text-center py-20 bg-white rounded-5xl">
+                    <div class="relative w-28 h-28 mx-auto rounded-full bg-red-50 text-red-400 flex items-center justify-center text-5xl animate-float"><i class="fa-regular fa-heart"></i></div>
+                    <p class="font-display font-bold text-2xl text-leaf-950 mt-6">পছন্দের তালিকা খালি</p>
+                    <p class="text-sm text-leaf-900/60 mt-1">পণ্যের ছবিতে থাকা ❤️ বাটনে চাপ দিয়ে এখানে সংরক্ষণ করুন।</p>
+                    <a href="products.html" class="btn btn-lime px-7 py-3.5 mt-6">পণ্য দেখুন <i class="fa-solid fa-arrow-right btn-icon"></i></a>
+                </div>`;
+        }
+        function addAllToCart() {
+            Wishlist.items().forEach(id => Cart.add(id, 1, true));
+            showToast('সব পছন্দের পণ্য কার্টে যোগ হয়েছে', 'success', { href: 'cart.html', label: 'কার্ট দেখুন' });
+        }
+        document.addEventListener('wishlist:change', () => {
+            // Let the heart animation play, then fade the removed card out
+            setTimeout(renderWishlist, 350);
+        });
+        renderWishlist();
+    </script>
+</body>
+</html>

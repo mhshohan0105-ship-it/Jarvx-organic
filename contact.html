@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>যোগাযোগ - JavrVX Organic</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="assets/js/tw-config.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Anek+Bangla:wght@500;600;700;800&family=Hind+Siliguri:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <style>
+        .faq-body { display: grid; grid-template-rows: 0fr; transition: grid-template-rows .5s cubic-bezier(.16,1,.3,1); }
+        .faq.open .faq-body { grid-template-rows: 1fr; }
+        .faq .faq-icon { transition: transform .5s cubic-bezier(.34,1.56,.64,1), background-color .3s; }
+        .faq.open .faq-icon { transform: rotate(135deg); background: #C5F04A; color: #06201A; }
+    </style>
+</head>
+<body data-page="contact" class="min-h-screen flex flex-col">
+    <div id="site-header"></div>
+
+    <section id="pageBanner" data-icon="fa-headset" data-title="আমরা শুনছি — যোগাযোগ করুন" data-crumb="যোগাযোগ" data-sub="অর্ডার, পণ্য বা ডেলিভারি নিয়ে যেকোনো প্রশ্নে আমাদের টিম প্রতিদিন সকাল ৯টা থেকে রাত ১০টা পর্যন্ত আছে।"></section>
+
+    <main class="flex-1 bg-cream pb-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-6 relative">
+
+            <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                <a href="tel:+8801700000000" data-reveal="up" class="group p-6 rounded-4xl bg-white border border-leaf-900/5 hover:bg-leaf-900 hover:-translate-y-2 transition-all duration-500">
+                    <span class="w-12 h-12 rounded-2xl bg-lime-500 text-leaf-950 flex items-center justify-center text-xl group-hover:rotate-12 transition-transform"><i class="fa-solid fa-phone"></i></span>
+                    <p class="font-bold text-leaf-950 group-hover:text-white mt-4 transition-colors">ফোন করুন</p>
+                    <p class="text-sm text-leaf-900/60 group-hover:text-lime-500 transition-colors">+৮৮০ ১৭০০-০০০০০০</p>
+                </a>
+                <a href="#" data-reveal="up" style="--d:.1s" class="group p-6 rounded-4xl bg-white border border-leaf-900/5 hover:bg-leaf-900 hover:-translate-y-2 transition-all duration-500">
+                    <span class="w-12 h-12 rounded-2xl bg-gold-500 text-leaf-950 flex items-center justify-center text-xl group-hover:rotate-12 transition-transform"><i class="fa-brands fa-whatsapp"></i></span>
+                    <p class="font-bold text-leaf-950 group-hover:text-white mt-4 transition-colors">WhatsApp</p>
+                    <p class="text-sm text-leaf-900/60 group-hover:text-lime-500 transition-colors">দ্রুত উত্তর পান</p>
+                </a>
+                <a href="mailto:support@javrvxorganic.com" data-reveal="up" style="--d:.2s" class="group p-6 rounded-4xl bg-white border border-leaf-900/5 hover:bg-leaf-900 hover:-translate-y-2 transition-all duration-500">
+                    <span class="w-12 h-12 rounded-2xl bg-lime-500 text-leaf-950 flex items-center justify-center text-xl group-hover:rotate-12 transition-transform"><i class="fa-solid fa-envelope"></i></span>
+                    <p class="font-bold text-leaf-950 group-hover:text-white mt-4 transition-colors">ইমেইল</p>
+                    <p class="text-sm text-leaf-900/60 group-hover:text-lime-500 transition-colors break-all">support@javrvxorganic.com</p>
+                </a>
+                <div data-reveal="up" style="--d:.3s" class="group p-6 rounded-4xl bg-white border border-leaf-900/5 hover:bg-leaf-900 hover:-translate-y-2 transition-all duration-500">
+                    <span class="w-12 h-12 rounded-2xl bg-gold-500 text-leaf-950 flex items-center justify-center text-xl group-hover:rotate-12 transition-transform"><i class="fa-solid fa-location-dot"></i></span>
+                    <p class="font-bold text-leaf-950 group-hover:text-white mt-4 transition-colors">অফিস</p>
+                    <p class="text-sm text-leaf-900/60 group-hover:text-lime-500 transition-colors">মিরপুর-১০, ঢাকা-১২১৬</p>
+                </div>
+            </div>
+
+            <div class="grid lg:grid-cols-2 gap-8 mt-12">
+                <!-- Form -->
+                <form onsubmit="sendMessage(event)" data-reveal="left" class="bg-white rounded-5xl p-6 sm:p-10 border border-leaf-900/5 space-y-4">
+                    <h2 class="font-bold text-3xl text-leaf-950">আমাদের মেসেজ পাঠান</h2>
+                    <p class="text-sm text-leaf-900/60 -mt-2">সাধারণত ২ ঘণ্টার মধ্যে উত্তর দেওয়া হয়।</p>
+                    <div class="grid sm:grid-cols-2 gap-3">
+                        <input required placeholder="আপনার নাম" class="input">
+                        <input type="tel" required placeholder="মোবাইল নম্বর" class="input">
+                    </div>
+                    <select class="input">
+                        <option>অর্ডার সংক্রান্ত</option>
+                        <option>পণ্য সম্পর্কে প্রশ্ন</option>
+                        <option>ডেলিভারি</option>
+                        <option>রিটার্ন / রিফান্ড</option>
+                        <option>হোলসেল / কর্পোরেট অর্ডার</option>
+                    </select>
+                    <textarea required rows="5" placeholder="আপনার মেসেজ লিখুন..." class="input"></textarea>
+                    <button type="submit" class="btn btn-dark w-full py-4">মেসেজ পাঠান <i class="fa-solid fa-paper-plane btn-icon"></i></button>
+                </form>
+
+                <!-- FAQ -->
+                <div data-reveal="right">
+                    <p class="eyebrow bg-leaf-900/5 text-leaf-700">সাধারণ প্রশ্ন</p>
+                    <h2 class="font-bold text-3xl sm:text-4xl text-leaf-950 mt-4 mb-6">প্রায়ই জিজ্ঞাসিত প্রশ্ন</h2>
+                    <div id="faqList" class="space-y-3"></div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div id="site-footer"></div>
+
+    <script src="assets/js/data.js"></script>
+    <script src="assets/js/app.js"></script>
+    <script>
+        const faqs = [
+            ['ডেলিভারি পেতে কত দিন লাগে?', 'ঢাকার ভিতরে সাধারণত ২৪ ঘণ্টার মধ্যে এবং ঢাকার বাইরে ২-৩ কার্যদিবসের মধ্যে ডেলিভারি দেওয়া হয়।'],
+            ['ডেলিভারি চার্জ কত?', 'ঢাকার ভিতরে ৳৬০ এবং ঢাকার বাইরে সারা বাংলাদেশে ৳১২০।'],
+            ['পণ্য খাঁটি কিনা কীভাবে বুঝব?', 'প্রতিটি ব্যাচের সরকারি ল্যাব টেস্ট রিপোর্ট আমাদের "ল্যাব রিপোর্ট" পেজে দেওয়া আছে। এছাড়া পণ্য হাতে পেয়ে দেখে তবেই মূল্য পরিশোধ করতে পারেন।'],
+            ['পণ্য পছন্দ না হলে কী করব?', 'ডেলিভারির সময় পণ্য দেখে পছন্দ না হলে সাথে সাথে ফেরত দিতে পারবেন। পরে কোনো সমস্যা হলে ৭ দিনের মধ্যে আমাদের জানান।'],
+            ['কোন কোন পেমেন্ট মেথড আছে?', 'ক্যাশ অন ডেলিভারি, বিকাশ, নগদ ও রকেট — যেকোনো মাধ্যমে পেমেন্ট করতে পারবেন।'],
+            ['প্রোমো কোড কীভাবে ব্যবহার করব?', `কার্ট পেজে "প্রোমো কোড" ঘরে ${PROMO_CODE} লিখে "প্রয়োগ" চাপুন — ১০% ছাড় সাথে সাথে যোগ হবে।`],
+        ];
+        faqList.innerHTML = faqs.map(([q, a], i) => `
+            <div class="faq ${i === 0 ? 'open' : ''} bg-white rounded-3xl border border-leaf-900/5 overflow-hidden">
+                <button onclick="toggleFaq(this.parentElement)" class="w-full flex items-center justify-between gap-4 text-left p-5 font-bold text-leaf-950">
+                    <span>${q}</span>
+                    <span class="faq-icon w-9 h-9 shrink-0 rounded-full bg-cream flex items-center justify-center"><i class="fa-solid fa-plus text-sm"></i></span>
+                </button>
+                <div class="faq-body"><div class="overflow-hidden"><p class="px-5 pb-5 text-sm text-leaf-900/70 leading-relaxed">${a}</p></div></div>
+            </div>`).join('');
+
+        function toggleFaq(el) {
+            const willOpen = !el.classList.contains('open');
+            faqList.querySelectorAll('.faq').forEach(f => f.classList.remove('open'));
+            el.classList.toggle('open', willOpen);
+        }
+
+        function sendMessage(e) {
+            e.preventDefault();
+            e.target.reset();
+            showToast('ধন্যবাদ! আপনার মেসেজ পাঠানো হয়েছে।');
+        }
+    </script>
+</body>
+</html>

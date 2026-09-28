@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>সকল পণ্য - JavrVX Organic</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="assets/js/tw-config.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Anek+Bangla:wght@500;600;700;800&family=Hind+Siliguri:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body data-page="products" class="min-h-screen flex flex-col">
+    <div id="site-header"></div>
+
+    <section id="pageBanner" data-icon="fa-basket-shopping" data-title="খাঁটি পণ্যের সম্পূর্ণ তালিকা" data-crumb="পণ্যসমূহ" data-sub="মধু, খেজুর, তেল-ঘি, মসলা, অর্গানিক হেলথ পণ্য ও বাদাম — ৪২টি বাছাইকৃত পণ্য।"></section>
+
+    <main class="flex-1 bg-cream pb-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+            <!-- Sticky filter bar -->
+            <div class="sticky top-24 z-30 -mt-8 mb-10" data-reveal="up">
+                <div class="bg-white/90 backdrop-blur-xl rounded-4xl shadow-xl shadow-leaf-900/5 border border-leaf-900/5 p-2 flex flex-col lg:flex-row lg:items-center gap-2">
+                    <div id="categoryTabs" class="relative flex gap-1 overflow-x-auto scrollbar-none flex-1"></div>
+                    <div class="flex items-center gap-2 px-2 pb-1 lg:pb-0">
+                        <span class="text-xs text-leaf-900/60 whitespace-nowrap"><b id="productCount" class="text-leaf-900 text-sm">০</b> টি পণ্য</span>
+                        <div class="relative">
+                            <select id="sortSelect" class="appearance-none text-xs pl-4 pr-9 py-2.5 bg-cream rounded-full font-semibold focus:outline-none focus:ring-2 focus:ring-leaf-600 cursor-pointer">
+                                <option value="default">ডিফল্ট ক্রম</option>
+                                <option value="low">দাম: কম → বেশি</option>
+                                <option value="high">দাম: বেশি → কম</option>
+                                <option value="name">নাম (A-Z)</option>
+                            </select>
+                            <i class="fa-solid fa-chevron-down absolute right-3.5 top-3 text-[10px] text-leaf-900/50 pointer-events-none"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="searchNote" class="hidden mb-6 flex items-center gap-2 text-sm text-leaf-900/70">
+                <i class="fa-solid fa-magnifying-glass text-leaf-600"></i>
+                "<b id="searchTerm" class="text-leaf-950"></b>" এর ফলাফল
+                <button onclick="liveSearch('')" class="ml-2 text-xs font-bold bg-leaf-900 text-lime-500 px-3 py-1 rounded-full hover:bg-red-500 hover:text-white transition-colors">মুছুন ✕</button>
+            </div>
+
+            <div id="productGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5"></div>
+
+            <div id="emptyState" class="hidden text-center py-24">
+                <div class="w-24 h-24 mx-auto rounded-full bg-white flex items-center justify-center text-4xl text-leaf-900/20 animate-float"><i class="fa-solid fa-magnifying-glass"></i></div>
+                <p class="font-display font-bold text-2xl text-leaf-950 mt-6">কোনো পণ্য পাওয়া যায়নি</p>
+                <p class="text-sm text-leaf-900/60 mt-1">অন্য কিছু লিখে খুঁজুন বা ক্যাটাগরি পরিবর্তন করুন।</p>
+            </div>
+        </div>
+    </main>
+
+    <div id="site-footer"></div>
+
+    <script src="assets/js/data.js"></script>
+    <script src="assets/js/app.js"></script>
+    <script>
+        let currentCategory = categories.some(c => c.id === qs('cat')) ? qs('cat') : 'All';
+        let searchQuery = qs('q') || '';
+        let sortMode = 'default';
+        const grid = document.getElementById('productGrid');
+
+        function syncUrl() {
+            const params = new URLSearchParams();
+            if (currentCategory !== 'All') params.set('cat', currentCategory);
+            if (searchQuery) params.set('q', searchQuery);
+            history.replaceState(null, '', 'products.html' + (params.toString() ? '?' + params : ''));
+        }
+
+        function renderCategories() {
+            categoryTabs.innerHTML = categories.map(c => {
+                const n = c.id === 'All' ? productsData.length : productsData.filter(p => p.category === c.id).length;
+                const active = c.id === currentCategory;
+                return `<button onclick="setCategory('${c.id}')" class="px-4 py-2.5 rounded-full text-xs sm:text-sm font-bold whitespace-nowrap transition-all duration-300 ${active
+                    ? 'bg-leaf-900 text-lime-500 shadow-lg'
+                    : 'text-leaf-900/60 hover:text-leaf-900 hover:bg-cream'}">${c.label} <span class="opacity-60 text-[11px]">${bn(n)}</span></button>`;
+            }).join('');
+        }
+
+        function renderProducts(animate) {
+            let list = productsData.filter(p => (currentCategory === 'All' || p.category === currentCategory) && matchesSearch(p, searchQuery));
+            if (sortMode === 'low') list = [...list].sort((a, b) => a.price - b.price);
+            if (sortMode === 'high') list = [...list].sort((a, b) => b.price - a.price);
+            if (sortMode === 'name') list = [...list].sort((a, b) => a.en.localeCompare(b.en));
+
+            const draw = () => {
+                productCount.textContent = bn(list.length);
+                searchNote.classList.toggle('hidden', !searchQuery);
+                searchTerm.textContent = searchQuery;
+                emptyState.classList.toggle('hidden', list.length > 0);
+                grid.innerHTML = list.map(productCard).join('');
+                grid.style.opacity = '1';
+                grid.style.transform = 'none';
+            };
+            if (!animate) return draw();
+            grid.style.transition = 'opacity .25s, transform .25s';
+            grid.style.opacity = '0';
+            grid.style.transform = 'translateY(12px)';
+            setTimeout(draw, 250);
+        }
+
+        function setCategory(id) {
+            currentCategory = id;
+            syncUrl();
+            renderCategories();
+            renderProducts(true);
+        }
+
+        sortSelect.addEventListener('change', e => { sortMode = e.target.value; renderProducts(true); });
+        let searchTimer;
+        document.addEventListener('search', e => {
+            searchQuery = e.detail;
+            syncUrl();
+            clearTimeout(searchTimer);
+            searchTimer = setTimeout(() => renderProducts(true), 150);
+        });
+
+        renderCategories();
+        renderProducts();
+    </script>
+</body>
+</html>

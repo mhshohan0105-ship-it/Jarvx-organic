@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>চেকআউট - JavrVX Organic</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="assets/js/tw-config.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Anek+Bangla:wght@500;600;700;800&family=Hind+Siliguri:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <style>
+        .pay-opt:has(input:checked) { border-color: #0B2E24; background: #F0FAF4; }
+        .pay-opt:has(input:checked) .pay-dot { background: #C5F04A; border-color: #0B2E24; }
+        .confetti { position: fixed; top: -20px; width: 10px; height: 14px; z-index: 90; pointer-events: none; animation: confetti-fall linear forwards; }
+        @keyframes confetti-fall { to { transform: translate3d(var(--x), 110vh, 0) rotate(var(--r)); } }
+        .check-draw { stroke-dasharray: 60; stroke-dashoffset: 60; animation: draw .6s .3s ease-out forwards; }
+        @keyframes draw { to { stroke-dashoffset: 0; } }
+    </style>
+</head>
+<body data-page="checkout" class="min-h-screen flex flex-col">
+    <div id="site-header"></div>
+
+    <section id="pageBanner" data-icon="fa-truck-fast" data-title="চেকআউট" data-crumb="চেকআউট"></section>
+
+    <main class="flex-1 bg-cream pb-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-6 relative">
+
+            <div id="checkoutView">
+                <div data-reveal="up" class="flex items-center justify-center gap-2 sm:gap-4 mb-10 text-sm font-bold">
+                    <a href="cart.html" class="flex items-center gap-2 text-leaf-600"><span class="w-8 h-8 rounded-full bg-leaf-900 text-lime-500 flex items-center justify-center"><i class="fa-solid fa-check text-xs"></i></span>কার্ট</a>
+                    <span class="w-10 sm:w-20 h-0.5 bg-leaf-900"></span>
+                    <span class="flex items-center gap-2 text-leaf-950"><span class="w-8 h-8 rounded-full bg-lime-500 flex items-center justify-center">২</span>তথ্য</span>
+                    <span class="w-10 sm:w-20 h-0.5 bg-leaf-900/10"></span>
+                    <span class="flex items-center gap-2 text-leaf-900/40"><span class="w-8 h-8 rounded-full bg-white border border-leaf-900/10 flex items-center justify-center">৩</span>সম্পন্ন</span>
+                </div>
+
+                <form id="orderForm" onsubmit="placeOrder(event)" class="grid lg:grid-cols-12 gap-6">
+                    <div class="lg:col-span-7 space-y-6">
+                        <div data-reveal="up" class="bg-white rounded-5xl p-6 sm:p-8 border border-leaf-900/5 space-y-4">
+                            <h2 class="font-display font-bold text-2xl text-leaf-950 flex items-center gap-3"><span class="w-9 h-9 rounded-xl bg-lime-500 text-leaf-950 text-base flex items-center justify-center"><i class="fa-solid fa-user"></i></span>ডেলিভারি তথ্য</h2>
+                            <div class="grid sm:grid-cols-2 gap-3">
+                                <label class="block"><span class="text-xs font-bold text-leaf-900/60">পূর্ণ নাম *</span><input name="name" required placeholder="যেমন: মো: কামরুল হাসান" class="input mt-1"></label>
+                                <label class="block"><span class="text-xs font-bold text-leaf-900/60">মোবাইল নম্বর *</span><input name="phone" type="tel" required pattern="(\+?88)?01[3-9][0-9]{8}" title="সঠিক ১১ ডিজিটের মোবাইল নম্বর দিন (যেমন 01712345678)" placeholder="01XXXXXXXXX" class="input mt-1"></label>
+                            </div>
+                            <label class="block"><span class="text-xs font-bold text-leaf-900/60">পূর্ণাঙ্গ ঠিকানা *</span><textarea name="address" required rows="2" placeholder="বাসা, রোড, এলাকা, জেলা" class="input mt-1"></textarea></label>
+                            <label class="block"><span class="text-xs font-bold text-leaf-900/60">অর্ডার নোট (ঐচ্ছিক)</span><input name="note" placeholder="যেমন: বিকেলে ডেলিভারি দিন" class="input mt-1"></label>
+                        </div>
+
+                        <div data-reveal="up" style="--d:.1s" class="bg-white rounded-5xl p-6 sm:p-8 border border-leaf-900/5 space-y-4">
+                            <h2 class="font-display font-bold text-2xl text-leaf-950 flex items-center gap-3"><span class="w-9 h-9 rounded-xl bg-gold-500 text-leaf-950 text-base flex items-center justify-center"><i class="fa-solid fa-wallet"></i></span>পেমেন্ট মেথড</h2>
+                            <div class="grid sm:grid-cols-2 gap-3">
+                                <label class="pay-opt flex items-center gap-3 p-4 rounded-3xl border-2 border-leaf-900/10 cursor-pointer transition-all hover:border-leaf-600">
+                                    <input type="radio" name="payment" value="cod" checked class="sr-only">
+                                    <span class="pay-dot w-5 h-5 rounded-full border-2 border-leaf-900/20 transition-colors"></span>
+                                    <i class="fa-solid fa-hand-holding-dollar text-2xl text-leaf-700"></i>
+                                    <span><b class="block text-sm text-leaf-950">ক্যাশ অন ডেলিভারি</b><span class="text-xs text-leaf-900/50">পণ্য হাতে পেয়ে পরিশোধ</span></span>
+                                </label>
+                                <label class="pay-opt flex items-center gap-3 p-4 rounded-3xl border-2 border-leaf-900/10 cursor-pointer transition-all hover:border-leaf-600">
+                                    <input type="radio" name="payment" value="mfs" class="sr-only">
+                                    <span class="pay-dot w-5 h-5 rounded-full border-2 border-leaf-900/20 transition-colors"></span>
+                                    <i class="fa-solid fa-mobile-screen-button text-2xl text-pink-600"></i>
+                                    <span><b class="block text-sm text-leaf-950">bKash / Nagad</b><span class="text-xs text-leaf-900/50">কনফার্মেশন কলে নির্দেশনা</span></span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <aside class="lg:col-span-5" data-reveal="right">
+                        <div class="lg:sticky lg:top-28 bg-white rounded-5xl p-6 sm:p-8 border border-leaf-900/5">
+                            <h2 class="font-display font-bold text-xl text-leaf-950 mb-4">আপনার অর্ডার</h2>
+                            <div id="orderItems" class="space-y-3 max-h-72 overflow-y-auto pr-1"></div>
+                            <div class="mt-5">
+                                <p class="text-xs font-bold text-leaf-900/50 uppercase tracking-wider mb-2">ডেলিভারি এলাকা</p>
+                                <div id="deliveryOpts" class="grid grid-cols-2 gap-2"></div>
+                            </div>
+                            <div class="space-y-2.5 text-sm pt-5 mt-5 border-t border-leaf-900/5">
+                                <div class="flex justify-between text-leaf-900/70"><span>পণ্যের মূল্য</span><b id="sumSubtotal" class="text-leaf-950"></b></div>
+                                <div id="rowBundle" class="hidden justify-between text-leaf-600"><span>প্যাকেজ ছাড় (৫%)</span><b id="sumBundle"></b></div>
+                                <div id="rowPromo" class="hidden justify-between text-leaf-600"><span>প্রোমো ছাড় (১০%)</span><b id="sumPromo"></b></div>
+                                <div class="flex justify-between text-leaf-900/70"><span>ডেলিভারি চার্জ</span><b id="sumDelivery" class="text-leaf-950"></b></div>
+                            </div>
+                            <div class="flex justify-between items-end pt-4 mt-4 border-t border-dashed border-leaf-900/15">
+                                <span class="font-bold text-leaf-950">সর্বমোট</span>
+                                <span id="sumTotal" class="font-display font-extrabold text-3xl text-leaf-950"></span>
+                            </div>
+                            <button type="submit" id="submitBtn" class="btn btn-lime w-full py-4 mt-6">অর্ডার নিশ্চিত করুন <i class="fa-solid fa-arrow-right btn-icon"></i></button>
+                            <p class="text-[11px] text-center text-leaf-900/50 mt-3"><i class="fa-solid fa-lock"></i> অর্ডারের পর আমাদের প্রতিনিধি কল করে নিশ্চিত করবেন</p>
+                        </div>
+                    </aside>
+                </form>
+            </div>
+
+            <!-- Empty -->
+            <div id="emptyView" class="hidden text-center py-20 bg-white rounded-5xl">
+                <div class="w-28 h-28 mx-auto rounded-full bg-cream text-leaf-900/30 flex items-center justify-center text-5xl animate-float"><i class="fa-solid fa-basket-shopping"></i></div>
+                <p class="font-display font-bold text-2xl text-leaf-950 mt-6">চেকআউটের জন্য কার্টে কোনো পণ্য নেই</p>
+                <a href="products.html" class="btn btn-dark px-7 py-3.5 mt-6">পণ্য দেখুন <i class="fa-solid fa-arrow-right btn-icon"></i></a>
+            </div>
+
+            <!-- Success -->
+            <div id="successView" class="hidden max-w-xl mx-auto text-center bg-white rounded-5xl p-10 sm:p-14 border border-leaf-900/5" style="animation: logo-pop .7s cubic-bezier(.34,1.56,.64,1) both">
+                <div class="relative w-28 h-28 mx-auto">
+                    <div class="absolute inset-0 rounded-full bg-lime-500/40 animate-ping"></div>
+                    <div class="relative w-28 h-28 rounded-full bg-lime-500 flex items-center justify-center">
+                        <svg viewBox="0 0 52 52" class="w-14 h-14"><path class="check-draw" fill="none" stroke="#06201A" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" d="M14 27 l8 8 l16 -18"/></svg>
+                    </div>
+                </div>
+                <h2 class="font-bold text-4xl text-leaf-950 mt-8">ধন্যবাদ!</h2>
+                <p class="text-leaf-900/70 mt-3">আপনার অর্ডার সফলভাবে গৃহীত হয়েছে। শীঘ্রই আমাদের প্রতিনিধি কল করে নিশ্চিত করবেন।</p>
+                <div class="mt-6 inline-flex flex-col gap-1 bg-cream rounded-3xl px-8 py-4">
+                    <span class="text-xs text-leaf-900/50">অর্ডার আইডি</span>
+                    <b id="orderId" class="font-brand text-xl text-leaf-950 tracking-wider"></b>
+                    <span id="orderTotal" class="text-sm text-leaf-700 font-bold"></span>
+                </div>
+                <div class="flex flex-col sm:flex-row gap-3 justify-center mt-8">
+                    <a href="products.html" class="btn btn-dark px-7 py-3.5">কেনাকাটা চালিয়ে যান <i class="fa-solid fa-arrow-right btn-icon"></i></a>
+                    <a href="index.html" class="btn btn-ghost !text-leaf-900 !border-leaf-900/15 px-7 py-3.5">হোমে যান</a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div id="site-footer"></div>
+
+    <script src="assets/js/data.js"></script>
+    <script src="assets/js/app.js"></script>
+    <script>
+        function render() {
+            const items = Cart.items();
+            checkoutView.classList.toggle('hidden', !items.length);
+            emptyView.classList.toggle('hidden', !!items.length);
+            orderItems.innerHTML = items.map(i => {
+                const p = findProduct(i.id);
+                return `
+                <div class="flex items-center gap-3">
+                    <div class="relative shrink-0"><img src="${p.image}" alt="" class="w-14 h-14 rounded-2xl object-cover"><span class="absolute -top-1.5 -right-1.5 min-w-5 h-5 px-1 rounded-full bg-leaf-900 text-lime-500 text-[10px] font-bold flex items-center justify-center">${bn(i.quantity)}</span></div>
+                    <div class="flex-1 min-w-0"><p class="text-sm font-bold text-leaf-950 truncate">${p.name}</p><p class="text-xs text-leaf-900/50">${p.weight}</p></div>
+                    <b class="text-sm text-leaf-950 whitespace-nowrap">${taka(p.price * i.quantity)}</b>
+                </div>`;
+            }).join('');
+
+            const current = store.get('delivery', DELIVERY_OPTIONS[0].value);
+            deliveryOpts.innerHTML = DELIVERY_OPTIONS.map(o => `
+                <button type="button" onclick="store.set('delivery', ${o.value}); render()" class="p-3 rounded-2xl border-2 text-xs font-bold text-left transition-all ${o.value === current ? 'border-leaf-900 bg-leaf-900 text-lime-500' : 'border-leaf-900/10 text-leaf-900 hover:border-leaf-600'}">${o.label}</button>`).join('');
+
+            const t = Cart.totals();
+            sumSubtotal.textContent = taka(t.subtotal);
+            rowBundle.classList.toggle('hidden', !t.bundleDiscount); rowBundle.classList.toggle('flex', !!t.bundleDiscount);
+            sumBundle.textContent = '− ' + taka(t.bundleDiscount);
+            rowPromo.classList.toggle('hidden', !t.promo); rowPromo.classList.toggle('flex', !!t.promo);
+            sumPromo.textContent = '− ' + taka(t.discount);
+            sumDelivery.textContent = taka(t.delivery);
+            sumTotal.textContent = taka(t.total);
+        }
+
+        function placeOrder(e) {
+            e.preventDefault();
+            const t = Cart.totals();
+            const f = new FormData(e.target);
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> অর্ডার করা হচ্ছে...';
+
+            // Front-end only: the order is kept in this browser. Connect a backend/API here to receive real orders.
+            const order = {
+                id: 'JVX-' + Date.now().toString().slice(-6),
+                at: new Date().toISOString(),
+                items: Cart.items(),
+                totals: t,
+                customer: { name: f.get('name'), phone: f.get('phone'), address: f.get('address'), note: f.get('note') },
+                payment: f.get('payment'),
+            };
+            setTimeout(() => {
+                store.set('orders', [order, ...store.get('orders', [])]);
+                Cart.clear();
+                store.set('promo', false);
+                orderId.textContent = order.id;
+                orderTotal.textContent = 'সর্বমোট ' + taka(t.total);
+                checkoutView.classList.add('hidden');
+                successView.classList.remove('hidden');
+                scrollTo({ top: 0, behavior: 'smooth' });
+                confetti();
+            }, 900);
+        }
+
+        function confetti() {
+            if (reduceMotion) return;
+            const colors = ['#C5F04A', '#F5A524', '#FFC857', '#3C9A74', '#ffffff'];
+            for (let i = 0; i < 80; i++) {
+                const c = document.createElement('span');
+                c.className = 'confetti';
+                c.style.cssText = `left:${Math.random() * 100}vw;background:${colors[i % colors.length]};border-radius:${Math.random() > .5 ? '50%' : '2px'};--x:${(Math.random() - .5) * 300}px;--r:${Math.random() * 900}deg;animation-duration:${2 + Math.random() * 2}s;animation-delay:${Math.random() * .5}s`;
+                document.body.appendChild(c);
+                setTimeout(() => c.remove(), 5000);
+            }
+        }
+
+        render();
+    </script>
+</body>
+</html>

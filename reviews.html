@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>গ্রাহক রিভিউ - JavrVX Organic</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="assets/js/tw-config.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Anek+Bangla:wght@500;600;700;800&family=Hind+Siliguri:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body data-page="reviews" class="min-h-screen flex flex-col">
+    <div id="site-header"></div>
+
+    <section id="pageBanner" data-icon="fa-comments" data-title="গ্রাহকরা যা বলছেন" data-crumb="রিভিউ" data-sub="সারা দেশের সন্তুষ্ট পরিবারের সত্যিকারের অভিজ্ঞতা। আপনার মতামতও জানান!"></section>
+
+    <main class="flex-1 bg-cream pb-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid lg:grid-cols-12 gap-8 -mt-6 relative">
+
+            <!-- Sidebar: summary + form -->
+            <aside class="lg:col-span-4 space-y-6">
+                <div data-reveal="left" class="bg-white rounded-5xl p-8 border border-leaf-900/5 lg:sticky lg:top-28">
+                    <div class="flex items-center gap-5">
+                        <p id="avgRating" class="font-display font-extrabold text-6xl text-leaf-950">০</p>
+                        <div>
+                            <div id="avgStars" class="text-gold-500 text-lg"></div>
+                            <p id="totalReviews" class="text-sm text-leaf-900/50"></p>
+                        </div>
+                    </div>
+                    <div id="ratingBars" class="space-y-2.5 mt-6"></div>
+                    <button onclick="document.getElementById('reviewForm').scrollIntoView({behavior:'smooth', block:'center'})" class="btn btn-lime w-full py-3.5 mt-7"><i class="fa-solid fa-pen"></i> রিভিউ লিখুন</button>
+                </div>
+            </aside>
+
+            <!-- Reviews -->
+            <div class="lg:col-span-8">
+                <div data-reveal="up" id="filterTabs" class="flex gap-1 p-1.5 bg-white rounded-full shadow-xl shadow-leaf-900/5 overflow-x-auto scrollbar-none mb-6"></div>
+                <div id="reviewGrid" class="grid sm:grid-cols-2 gap-5"></div>
+
+                <!-- Write review -->
+                <form id="reviewForm" onsubmit="submitReview(event)" data-reveal="up" class="mt-10 relative overflow-hidden rounded-5xl mesh-bg grain text-white p-8 sm:p-10">
+                    <div class="blob w-64 h-64 bg-lime-500/30 -top-20 -right-20 animate-blob"></div>
+                    <div class="relative">
+                        <h2 class="font-bold text-3xl">আপনার অভিজ্ঞতা শেয়ার করুন</h2>
+                        <p class="text-white/60 text-sm mt-1">আপনার রিভিউ অন্যদের সঠিক পণ্য বেছে নিতে সাহায্য করবে।</p>
+                        <div class="flex gap-2 text-3xl mt-6" id="starInput"></div>
+                        <div class="grid sm:grid-cols-2 gap-3 mt-5">
+                            <input name="name" required placeholder="আপনার নাম" class="input bg-white/10 border-white/10 text-white placeholder-white/40 focus:bg-white/15">
+                            <input name="loc" required placeholder="এলাকা (যেমন: মিরপুর, ঢাকা)" class="input bg-white/10 border-white/10 text-white placeholder-white/40 focus:bg-white/15">
+                        </div>
+                        <select name="product" required class="input mt-3 bg-white/10 border-white/10 text-white focus:bg-white/15 [&>option]:text-leaf-950"></select>
+                        <textarea name="text" required rows="3" placeholder="আপনার মতামত লিখুন..." class="input mt-3 bg-white/10 border-white/10 text-white placeholder-white/40 focus:bg-white/15"></textarea>
+                        <button type="submit" class="btn btn-lime px-8 py-4 mt-5">রিভিউ জমা দিন <i class="fa-solid fa-paper-plane btn-icon"></i></button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <div id="site-footer"></div>
+
+    <script src="assets/js/data.js"></script>
+    <script src="assets/js/app.js"></script>
+    <script>
+        // Reviews written on this device are stored locally and shown alongside the built-in ones
+        const allReviews = () => store.get('myReviews', []).concat(reviewsData);
+        let filter = 'All';
+        let starValue = 5;
+
+        function renderSummary() {
+            const list = allReviews();
+            const avg = list.reduce((s, r) => s + r.rating, 0) / list.length;
+            avgRating.textContent = bn(avg.toFixed(1));
+            avgStars.innerHTML = [1, 2, 3, 4, 5].map(i => `<i class="fa-${i <= Math.round(avg) ? 'solid' : 'regular'} fa-star"></i>`).join('');
+            totalReviews.textContent = `${bn(list.length)} টি রিভিউ`;
+            ratingBars.innerHTML = [5, 4, 3, 2, 1].map(s => {
+                const n = list.filter(r => r.rating === s).length;
+                return `
+                <div class="flex items-center gap-3 text-sm">
+                    <span class="w-6 text-leaf-900/60">${bn(s)}★</span>
+                    <div class="flex-1 h-2.5 bg-cream rounded-full overflow-hidden"><div class="rating-bar h-full bg-gradient-to-r from-gold-500 to-lime-500 rounded-full transition-all duration-1000 ease-out" style="width:0" data-w="${(n / list.length) * 100}"></div></div>
+                    <span class="w-6 text-right text-leaf-900/60">${bn(n)}</span>
+                </div>`;
+            }).join('');
+            setTimeout(() => document.querySelectorAll('.rating-bar').forEach(b => b.style.width = b.dataset.w + '%'), 400);
+        }
+
+        function renderFilters() {
+            filterTabs.innerHTML = categories.map(c => `
+                <button onclick="setFilter('${c.id}')" class="px-4 py-2.5 rounded-full text-sm font-bold whitespace-nowrap transition-all duration-300 ${c.id === filter ? 'bg-leaf-900 text-lime-500 shadow-lg' : 'text-leaf-900/60 hover:text-leaf-900'}">${c.label}</button>`).join('');
+        }
+
+        function renderReviews() {
+            const list = allReviews().filter(r => filter === 'All' || (findProduct(r.product) || {}).category === filter);
+            reviewGrid.innerHTML = list.length
+                ? list.map(r => reviewCard(r)).join('')
+                : `<div class="sm:col-span-2 text-center py-16 bg-white rounded-4xl"><i class="fa-regular fa-comment-dots text-4xl text-leaf-900/20"></i><p class="text-leaf-900/60 mt-3">এই ক্যাটাগরিতে এখনো কোনো রিভিউ নেই — প্রথম রিভিউটি আপনিই লিখুন!</p></div>`;
+        }
+
+        function setFilter(id) { filter = id; renderFilters(); renderReviews(); }
+
+        function renderStars() {
+            starInput.innerHTML = [1, 2, 3, 4, 5].map(i => `<button type="button" onclick="starValue=${i};renderStars()" aria-label="${i} তারা" class="hover:scale-125 transition-transform ${i <= starValue ? 'text-gold-400' : 'text-white/20'}"><i class="fa-solid fa-star"></i></button>`).join('');
+        }
+
+        function submitReview(e) {
+            e.preventDefault();
+            const f = new FormData(e.target);
+            const mine = store.get('myReviews', []);
+            mine.unshift({ name: f.get('name').trim(), loc: f.get('loc').trim(), text: f.get('text').trim(), product: f.get('product'), rating: starValue });
+            store.set('myReviews', mine);
+            e.target.reset();
+            starValue = 5; renderStars();
+            filter = 'All'; renderFilters(); renderSummary(); renderReviews();
+            reviewGrid.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            showToast('ধন্যবাদ! আপনার রিভিউ যোগ হয়েছে।');
+        }
+
+        reviewForm.querySelector('select').innerHTML = '<option value="">কোন পণ্যের রিভিউ?</option>' +
+            productsData.map(p => `<option value="${p.id}">${p.name} (${p.weight})</option>`).join('');
+
+        renderSummary();
+        renderFilters();
+        renderReviews();
+        renderStars();
+    </script>
+</body>
+</html>

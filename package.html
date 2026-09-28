@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>পারিবারিক প্যাকেজ - JavrVX Organic</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="assets/js/tw-config.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Anek+Bangla:wght@500;600;700;800&family=Hind+Siliguri:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body data-page="package" class="min-h-screen flex flex-col">
+    <div id="site-header"></div>
+
+    <section id="pageBanner" data-icon="fa-people-roof" data-title="মাসিক পারিবারিক অর্গানিক বাজার" data-crumb="পারিবারিক প্যাকেজ" data-sub="পরিবারের সদস্য সংখ্যা বেছে নিন, প্রয়োজনমতো পরিমাণ বদলান — পুরো প্যাকেজে পাবেন ৫% ছাড়।"></section>
+
+    <main class="flex-1 bg-cream pb-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-6 relative">
+
+            <!-- Step 1: family size -->
+            <div class="grid sm:grid-cols-3 gap-4" id="famCards"></div>
+
+            <div class="grid lg:grid-cols-12 gap-6 mt-8">
+                <!-- Step 2: items -->
+                <div class="lg:col-span-8 bg-white rounded-5xl p-4 sm:p-8 border border-leaf-900/5" data-reveal="up">
+                    <div class="flex items-center justify-between mb-5 px-2">
+                        <h2 class="font-display font-bold text-2xl text-leaf-950">প্যাকেজে যা থাকছে</h2>
+                        <button onclick="selectFamily(currentFamily)" class="text-xs font-bold text-leaf-900/50 hover:text-leaf-900 flex items-center gap-1.5"><i class="fa-solid fa-rotate-left"></i>রিসেট</button>
+                    </div>
+                    <div id="calcResults" class="space-y-2"></div>
+                </div>
+
+                <!-- Summary -->
+                <div class="lg:col-span-4" data-reveal="right">
+                    <div class="lg:sticky lg:top-28 relative overflow-hidden rounded-5xl mesh-bg grain text-white p-8">
+                        <div class="blob w-48 h-48 bg-lime-500/40 -top-16 -right-16 animate-blob"></div>
+                        <div class="relative">
+                            <p class="text-xs font-bold uppercase tracking-widest text-lime-500">মাসিক খরচ</p>
+                            <p id="calcOriginal" class="text-white/40 line-through mt-4 h-6"></p>
+                            <p id="calcTotalPrice" class="font-display font-extrabold text-5xl">৳০</p>
+                            <p id="calcSaving" class="inline-flex items-center gap-2 mt-3 text-sm bg-lime-500 text-leaf-950 font-bold px-3 py-1 rounded-full"></p>
+
+                            <div class="mt-6 pt-6 border-t border-white/10 space-y-2 text-sm text-white/70">
+                                <div class="flex justify-between"><span>মোট আইটেম</span><b id="calcCount" class="text-white"></b></div>
+                                <div class="flex justify-between"><span>প্যাকেজ ছাড়</span><b class="text-lime-500">৫%</b></div>
+                            </div>
+                            <button onclick="addBundleToCart(this)" data-magnetic class="btn btn-lime w-full py-4 mt-7"><i class="fa-solid fa-bag-shopping"></i> প্যাকেজ কার্টে যোগ করুন</button>
+                            <p class="text-[11px] text-white/40 text-center mt-3">ছাড় কার্ট ও চেকআউটে স্বয়ংক্রিয়ভাবে যুক্ত হবে</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid sm:grid-cols-3 gap-4 mt-8">
+                <div data-reveal="up" class="p-6 rounded-4xl bg-white border border-leaf-900/5 flex gap-4 hover:-translate-y-1 transition-transform duration-500"><span class="w-12 h-12 rounded-2xl bg-gold-100 text-gold-600 flex items-center justify-center text-xl shrink-0"><i class="fa-solid fa-calendar-check"></i></span><div><p class="font-bold text-leaf-950">প্রতি মাসে ডেলিভারি</p><p class="text-xs text-leaf-900/60 mt-1">নির্দিষ্ট তারিখে বাসায় পৌঁছে যাবে</p></div></div>
+                <div data-reveal="up" style="--d:.1s" class="p-6 rounded-4xl bg-white border border-leaf-900/5 flex gap-4 hover:-translate-y-1 transition-transform duration-500"><span class="w-12 h-12 rounded-2xl bg-leaf-50 text-leaf-700 flex items-center justify-center text-xl shrink-0"><i class="fa-solid fa-percent"></i></span><div><p class="font-bold text-leaf-950">৫% প্যাকেজ ছাড়</p><p class="text-xs text-leaf-900/60 mt-1">আলাদা কেনার চেয়ে সাশ্রয়ী</p></div></div>
+                <div data-reveal="up" style="--d:.2s" class="p-6 rounded-4xl bg-white border border-leaf-900/5 flex gap-4 hover:-translate-y-1 transition-transform duration-500"><span class="w-12 h-12 rounded-2xl bg-gold-100 text-gold-600 flex items-center justify-center text-xl shrink-0"><i class="fa-solid fa-sliders"></i></span><div><p class="font-bold text-leaf-950">কাস্টমাইজ করুন</p><p class="text-xs text-leaf-900/60 mt-1">যেকোনো পণ্যের পরিমাণ বদলান</p></div></div>
+            </div>
+        </div>
+    </main>
+
+    <div id="site-footer"></div>
+
+    <script src="assets/js/data.js"></script>
+    <script src="assets/js/app.js"></script>
+    <script>
+        let currentFamily = 2;
+        let plan = {};
+        let lastTotal = 0;
+        const families = [
+            { n: 2, emoji: '👨‍👩‍👦', title: 'ছোট পরিবার', sub: '২-৩ জন' },
+            { n: 4, emoji: '👨‍👩‍👧‍👦', title: 'মাঝারি পরিবার', sub: '৪-৫ জন' },
+            { n: 6, emoji: '🏡', title: 'যৌথ পরিবার', sub: '৬+ জন' },
+        ];
+
+        function renderFamilies() {
+            famCards.innerHTML = families.map((f, i) => {
+                const active = f.n === currentFamily;
+                return `
+                <button onclick="selectFamily(${f.n})" data-reveal="up" style="--d:${i * 0.1}s" class="${document.querySelector('#famCards .in') ? 'in' : ''} group relative text-left p-6 rounded-4xl border-2 transition-all duration-500 overflow-hidden ${active
+                    ? 'bg-leaf-900 border-leaf-900 text-white shadow-2xl shadow-leaf-900/30 -translate-y-1'
+                    : 'bg-white border-leaf-900/5 text-leaf-950 hover:border-leaf-600'}">
+                    <span class="absolute -right-4 -bottom-6 text-8xl opacity-20 group-hover:scale-110 group-hover:rotate-6 transition-transform duration-700">${f.emoji}</span>
+                    <span class="text-3xl">${f.emoji}</span>
+                    <p class="font-display font-bold text-xl mt-3">${f.title}</p>
+                    <p class="text-sm ${active ? 'text-lime-500' : 'text-leaf-900/50'}">${f.sub}</p>
+                    <span class="absolute top-5 right-5 w-7 h-7 rounded-full border-2 flex items-center justify-center transition-all ${active ? 'bg-lime-500 border-lime-500 text-leaf-950' : 'border-leaf-900/20'}">${active ? '<i class="fa-solid fa-check text-xs"></i>' : ''}</span>
+                </button>`;
+            }).join('');
+        }
+
+        function selectFamily(n) {
+            currentFamily = n;
+            plan = { ...bundlePlans[n] };
+            renderFamilies();
+            renderPlan(true);
+        }
+
+        function setPlanQty(id, d) {
+            plan[id] = Math.max(0, (plan[id] || 0) + d);
+            renderPlan();
+        }
+
+        function renderPlan(stagger) {
+            let total = 0, count = 0;
+            calcResults.innerHTML = Object.entries(plan).map(([id, q], i) => {
+                const p = findProduct(id);
+                total += p.price * q;
+                count += q;
+                return `
+                <div class="group flex items-center gap-4 p-3 rounded-3xl hover:bg-cream transition-colors ${q === 0 ? 'opacity-40' : ''}" ${stagger ? `style="animation: logo-pop .5s ${i * 0.06}s both"` : ''}>
+                    <img src="${p.image}" alt="" class="w-16 h-16 rounded-2xl object-cover shrink-0 group-hover:scale-105 group-hover:rotate-3 transition-transform duration-500">
+                    <div class="flex-1 min-w-0">
+                        <a href="product.html?id=${p.id}" class="font-bold text-leaf-950 hover:text-leaf-600 leading-snug">${p.name}</a>
+                        <p class="text-xs text-leaf-900/50">${p.weight} · ${taka(p.price)}</p>
+                    </div>
+                    <div class="flex items-center bg-white border border-leaf-900/10 rounded-full p-0.5">
+                        <button onclick="setPlanQty('${id}', -1)" aria-label="কমান" class="w-8 h-8 rounded-full hover:bg-cream">−</button>
+                        <span class="w-7 text-center font-bold text-sm">${bn(q)}</span>
+                        <button onclick="setPlanQty('${id}', 1)" aria-label="বাড়ান" class="w-8 h-8 rounded-full hover:bg-cream">+</button>
+                    </div>
+                    <span class="w-20 text-right font-display font-bold text-leaf-950 hidden sm:block">${taka(p.price * q)}</span>
+                </div>`;
+            }).join('');
+
+            const discounted = total * (1 - BUNDLE_DISCOUNT);
+            calcOriginal.textContent = total ? taka(total) : '';
+            animateNumber(calcTotalPrice, lastTotal, discounted);
+            lastTotal = discounted;
+            calcSaving.innerHTML = `<i class="fa-solid fa-piggy-bank"></i> সাশ্রয় ${taka(total - discounted)}`;
+            calcCount.textContent = bn(count) + ' টি';
+        }
+
+        function animateNumber(el, from, to) {
+            const start = performance.now();
+            el.textContent = taka(to);
+            const step = now => {
+                const k = Math.min(1, (now - start) / 600);
+                el.textContent = taka(from + (to - from) * (1 - Math.pow(1 - k, 3)));
+                if (k < 1) requestAnimationFrame(step);
+            };
+            requestAnimationFrame(step);
+        }
+
+        function addBundleToCart(btn) {
+            const chosen = Object.fromEntries(Object.entries(plan).filter(([, q]) => q > 0));
+            if (!Object.keys(chosen).length) return showToast('প্যাকেজে অন্তত একটি পণ্য রাখুন।', 'error');
+            flyToCart(calcResults.querySelector('img'), () => {
+                Cart.addBundle(chosen);
+                showToast('পারিবারিক প্যাকেজ কার্টে যোগ হয়েছে — ৫% ছাড়সহ!', 'success', { href: 'cart.html', label: 'কার্ট দেখুন' });
+            });
+        }
+
+        selectFamily(2);
+    </script>
+</body>
+</html>
