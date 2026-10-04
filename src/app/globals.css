@@ -101,8 +101,10 @@ h1, h2, h3, .font-display { font-family: 'Anek Bangla', 'Hind Siliguri', sans-se
 .split[data-in] .word > span { transform: none; }
 
 .rotator { display: inline-grid; vertical-align: bottom; }
-.rotator > span { grid-area: 1 / 1; opacity: 0; transform: translateY(60%) rotateX(-60deg); transition: opacity .5s, transform .7s var(--ease-out); }
-.rotator > span.on { opacity: 1; transform: none; }
+/* Hidden words also get visibility:hidden (delayed until the exit animation ends): some Chrome builds
+   ignore opacity on 3D-transformed background-clip:text spans, which made every word show at once */
+.rotator > span { grid-area: 1 / 1; opacity: 0; visibility: hidden; transform: translateY(60%) rotateX(-60deg); transition: opacity .5s, transform .7s var(--ease-out), visibility 0s .7s; }
+.rotator > span.on { opacity: 1; visibility: visible; transform: none; transition-delay: 0s; }
 .rotator > span.off { opacity: 0; transform: translateY(-60%) rotateX(60deg); }
 
 .eyebrow {
